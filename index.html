@@ -1,480 +1,350 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Kaisen</title>
-    <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#1e293b" />
+    <link rel="manifest" href="manifest.json">
+    <!-- Meta etiquetas exclusivas para iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000000">
     <style>
-      :root {
-        --bg-main: #0f172a;
-        --bg-card: #1e293b;
-        --text-main: #f8fafc;
-        --text-muted: #94a3b8;
-        --accent: #c8f543;
-        --success: #22c55e;
-      }
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: system-ui, sans-serif;
-      }
-      body {
-        background-color: var(--bg-main);
-        color: var(--text-main);
-        padding: 15px;
-        padding-bottom: 80px;
-      }
-      header {
-        text-align: center;
-        margin-bottom: 20px;
-      }
-      header h1 {
-        font-size: 1.5rem;
-        color: var(--accent);
-      }
-      header p {
-        font-size: 0.9rem;
-        color: var(--text-muted);
-      }
+        :root {
+            --bg-ios: #000000;
+            --bg-card-ios: #1c1c1e;
+            --bg-card-inner: #2c2c2e;
+            --text-main: #ffffff;
+            --text-muted: #8e8e93;
+            --accent: #c8f543;
+            --success: #34c759;
+            --danger: #ff453a;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        
+        body { 
+            background-color: var(--bg-ios); 
+            color: var(--text-main); 
+            padding: 20px 16px; 
+            padding-top: calc(40px + env(safe-area-inset-top));
+            padding-bottom: calc(90px + env(safe-area-inset-bottom));
+            -webkit-font-smoothing: antialiased;
+        }
 
-      .tabs {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
-      }
-      .tab-btn {
-        flex: 1;
-        padding: 10px;
-        background: var(--bg-card);
-        border: none;
-        color: var(--text-muted);
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 0.85rem;
-      }
-      .tab-btn.active {
-        background: var(--accent);
-        color: var(--bg-main);
-      }
+        /* Encabezado estilo iOS Large Titles */
+        header { text-align: left; margin-bottom: 24px; padding-left: 4px; }
+        header h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.5px; }
+        header p { font-size: 0.95rem; color: var(--text-muted); margin-top: 2px; }
+        
+        .routine-section { display: none; }
+        .routine-section.active { display: block; animation: iosFade 0.25s ease-out; }
+        
+        @keyframes iosFade {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-      .routine-section {
-        display: none;
-      }
-      .routine-section.active {
-        display: block;
-      }
+        /* Lista de ejercicios estilo iOS Form Group */
+        .ios-group {
+            background: var(--bg-card-ios);
+            border-radius: 12px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
 
-      .exercise-card {
-        background: var(--bg-card);
-        padding: 15px;
-        border-radius: 12px;
-        margin-bottom: 15px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      }
-      .exercise-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-      }
-      .exercise-name {
-        font-size: 1.1rem;
-        font-weight: bold;
-      }
-      .exercise-target {
-        font-size: 0.8rem;
-        color: var(--accent);
-        background: rgba(56, 189, 248, 0.1);
-        padding: 2px 8px;
-        border-radius: 12px;
-      }
-      .exercise-meta {
-        font-size: 0.85rem;
-        color: var(--text-muted);
-        margin-bottom: 12px;
-      }
+        .exercise-card { 
+            padding: 16px; 
+            border-bottom: 0.5px solid #38383a;
+        }
+        .exercise-card:last-child { border-bottom: none; }
+        
+        .exercise-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+        .exercise-name { font-size: 1.05rem; font-weight: 600; letter-spacing: -0.2px; }
+        .exercise-target { font-size: 0.75rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .exercise-meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; }
+        
+        /* Series Tracker */
+        .series-tracker { display: flex; flex-direction: column; gap: 2px; }
+        .series-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: var(--bg-card-inner); 
+            padding: 10px 14px; 
+            border-radius: 8px;
+            margin-bottom: 4px;
+        }
+        .series-row span { font-size: 0.9rem; color: #e5e5ea; }
+        
+        /* Checkbox estilo Apple Ring */
+        .chk-box { 
+            width: 24px; 
+            height: 24px; 
+            border-radius: 50%; 
+            border: 2px solid #48484a; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: transparent;
+            transition: all 0.2s cubic-bezier(0.1, 0.8, 0.25, 1);
+        }
+        .chk-box.checked { 
+            background: var(--success); 
+            border-color: var(--success); 
+            color: #ffffff; 
+            transform: scale(1.05);
+        }
 
-      .series-tracker {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .series-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: rgba(15, 23, 42, 0.5);
-        padding: 8px 12px;
-        border-radius: 8px;
-      }
-      .chk-box {
-        width: 26px;
-        height: 26px;
-        border-radius: 6px;
-        border: 2px solid var(--text-muted);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-weight: bold;
-        color: transparent;
-      }
-      .chk-box.checked {
-        background: var(--success);
-        border-color: var(--success);
-        color: white;
-      }
+        /* Botones del sistema iOS */
+        .btn-action { 
+            width: 100%; 
+            padding: 14px; 
+            background: var(--bg-card-ios); 
+            border: none; 
+            color: var(--accent); 
+            border-radius: 12px; 
+            font-weight: 600; 
+            font-size: 1.05rem; 
+            cursor: pointer; 
+            margin-top: 10px;
+            text-align: center;
+            transition: opacity 0.2s;
+        }
+        .btn-action:active { opacity: 0.6; }
+        
+        /* Historial */
+        .history-container { background: var(--bg-card-ios); border-radius: 12px; overflow: hidden; padding: 4px 16px; }
+        .history-item { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 0.5px solid #38383a; font-size: 0.95rem; }
+        .history-item:last-child { border: none; }
+        .history-item strong { font-weight: 500; }
 
-      .btn-action {
-        width: 100%;
-        padding: 12px;
-        background: var(--success);
-        border: none;
-        color: var(--bg-card);
-        border-radius: 8px;
-        font-weight: bold;
-        font-size: 1rem;
-        cursor: pointer;
-        margin-top: 10px;
-      }
-
-      .history-container {
-        background: var(--bg-card);
-        padding: 15px;
-        border-radius: 12px;
-        margin-top: 20px;
-      }
-      .history-item {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        font-size: 0.9rem;
-      }
-      .history-item:last-child {
-        border: none;
-      }
+        /* TAB BAR INFERIOR DE IOS (Fija con efecto traslúcido) */
+        .ios-tab-bar { 
+            position: fixed; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            height: calc(65px + env(safe-area-inset-bottom)); 
+            background: rgba(28, 28, 30, 0.85); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 0.5px solid #2c2c2e;
+            display: flex; 
+            justify-content: space-around; 
+            padding-top: 8px;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 999;
+        }
+        .tab-btn { 
+            background: none; 
+            border: none; 
+            color: var(--text-muted); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            cursor: pointer; 
+            width: 20%;
+            transition: color 0.2s;
+        }
+        .tab-btn .icon { font-size: 1.35rem; margin-bottom: 3px; }
+        .tab-btn .label { font-size: 0.65rem; font-weight: 500; }
+        
+        /* Estado seleccionado estilo iOS */
+        .tab-btn.active { color: var(--accent); }
     </style>
-  </head>
-  <body>
-    <header>
-      <h1>Hola, Henry</h1>
-      <p>Bienvenido a Kaisen</p>
-    </header>
+</head>
+<body>
 
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('dia1', this)">
-        Lunes<br />Pecho
-      </button>
-      <button class="tab-btn" onclick="switchTab('dia3', this)">
-        Miércoles<br />Abs
-      </button>
-      <button class="tab-btn" onclick="switchTab('dia5', this)">
-        Viernes<br />Brazos
-      </button>
-      <button class="tab-btn" onclick="switchTab('stats', this)">
-        📊<br />Progreso
-      </button>
-    </div>
+    <header>
+        <h1>Hola, Henry</h1>
+        <p>Bienvenido a Kaisen</p>
+    </header>
 
     <!-- DÍA 1: PECHO -->
     <div id="dia1" class="routine-section active">
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">1. Flexiones Inclinadas</span
-          ><span class="exercise-target">Pecho Sup.</span>
+        <div class="ios-group">
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">1. Flexiones Inclinadas</span><span class="exercise-target">Pecho Sup</span></div>
+                <div class="exercise-meta">4 series de 10–15 reps (Pies elevados)</div>
+                <div class="series-tracker" data-exercise="flexiones_inclinadas" data-sets="4"></div>
+            </div>
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">2. Flexiones Normales</span><span class="exercise-target">Pecho Gral</span></div>
+                <div class="exercise-meta">3 series de 12–20 reps</div>
+                <div class="series-tracker" data-exercise="flexiones_normales" data-sets="3"></div>
+            </div>
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">3. Flexiones Abiertas</span><span class="exercise-target">Pecho Ext</span></div>
+                <div class="exercise-meta">3 series de 10–15 reps</div>
+                <div class="series-tracker" data-exercise="flexiones_abiertas" data-sets="3"></div>
+            </div>
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">4. Flexiones Lentas</span><span class="exercise-target">Control</span></div>
+                <div class="exercise-meta">2 series de 8–10 reps (3s bajando)</div>
+                <div class="series-tracker" data-exercise="flexiones_lentas" data-sets="2"></div>
+            </div>
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">5. Fondos en Silla</span><span class="exercise-target">Trícep</span></div>
+                <div class="exercise-meta">2 series de 10–12 reps (Ligero)</div>
+                <div class="series-tracker" data-exercise="fondos_silla_pecho" data-sets="2"></div>
+            </div>
         </div>
-        <div class="exercise-meta">
-          Objetivo: 4 series de 10–15 reps (Pies elevados)
-        </div>
-        <div
-          class="series-tracker"
-          data-exercise="flexiones_inclinadas"
-          data-sets="4"
-        ></div>
-      </div>
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">2. Flexiones Normales</span
-          ><span class="exercise-target">Pecho Gral.</span>
-        </div>
-        <div class="exercise-meta">Objetivo: 3 series de 12–20 reps</div>
-        <div
-          class="series-tracker"
-          data-exercise="flexiones_normales"
-          data-sets="3"
-        ></div>
-      </div>
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">3. Flexiones Abiertas</span
-          ><span class="exercise-target">Pecho Ext.</span>
-        </div>
-        <div class="exercise-meta">Objetivo: 3 series de 10–15 reps</div>
-        <div
-          class="series-tracker"
-          data-exercise="flexiones_abiertas"
-          data-sets="3"
-        ></div>
-      </div>
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">4. Flexiones Lentas</span
-          ><span class="exercise-target">Control</span>
-        </div>
-        <div class="exercise-meta">
-          Objetivo: 2 series de 8–10 reps (3s bajando)
-        </div>
-        <div
-          class="series-tracker"
-          data-exercise="flexiones_lentas"
-          data-sets="2"
-        ></div>
-      </div>
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">5. Fondos en Silla</span
-          ><span class="exercise-target">Tríceps</span>
-        </div>
-        <div class="exercise-meta">
-          Objetivo: 2 series de 10–12 reps (Ligero)
-        </div>
-        <div
-          class="series-tracker"
-          data-exercise="fondos_silla_pecho"
-          data-sets="2"
-        ></div>
-      </div>
-      <button
-        class="btn-action"
-        onclick="finishWorkout('Día 1 — Pecho y Tríceps')"
-      >
-        Finalizar Entrenamiento
-      </button>
+        <button class="btn-action" onclick="finishWorkout('Lunes — Pecho y Tríceps')">Finalizar Entrenamiento</button>
     </div>
 
     <!-- DÍA 3: ABDOMEN -->
     <div id="dia3" class="routine-section">
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">1. Crunch Clásico</span
-          ><span class="exercise-target">Abs Sup.</span>
+        <div class="ios-group">
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">1. Crunch Clásico</span><span class="exercise-target">Abs Sup</span></div>
+                <div class="exercise-meta">4 series de 25 reps (Tus 100 base)</div>
+                <div class="series-tracker" data-exercise="crunch_clasico" data-sets="4"></div>
+            </div>
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">2. Elevaciones de Piernas</span><span class="exercise-target">Abs Inf</span></div>
+                <div class="exercise-meta">3 series de 12–15 reps</div>
+                <div class="series-tracker" data-exercise="elevaciones_piernas" data-sets="3"></div>
+            </div>
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">3. Plancha</span><span class="exercise-target">Core</span></div>
+                <div class="exercise-meta">3 series de 30–45 segundos</div>
+                <div class="series-tracker" data-exercise="plancha" data-sets="3"></div>
+            </div>
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">4. Abdominal Lento</span><span class="exercise-target">Tensión</span></div>
+                <div class="exercise-meta">2 series de 15 reps (Pausa 2s arriba)</div>
+                <div class="series-tracker" data-exercise="abs_lento" data-sets="2"></div>
+            </div>
         </div>
-        <div class="exercise-meta">
-          Objetivo: 4 series de 25 reps (Tus 100 base)
-        </div>
-        <div
-          class="series-tracker"
-          data-exercise="crunch_clasico"
-          data-sets="4"
-        ></div>
-      </div>
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">2. Elevaciones de Piernas</span
-          ><span class="exercise-target">Abs Inf.</span>
-        </div>
-        <div class="exercise-meta">Objetivo: 3 series de 12–15 reps</div>
-        <div
-          class="series-tracker"
-          data-exercise="elevaciones_piernas"
-          data-sets="3"
-        ></div>
-      </div>
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">3. Plancha</span
-          ><span class="exercise-target">Core</span>
-        </div>
-        <div class="exercise-meta">Objetivo: 3 series de 30–45 segundos</div>
-        <div class="series-tracker" data-exercise="plancha" data-sets="3"></div>
-      </div>
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">4. Abdominal Lento</span
-          ><span class="exercise-target">Tensión</span>
-        </div>
-        <div class="exercise-meta">
-          Objetivo: 2 series de 15 reps (Pausa 2s arriba)
-        </div>
-        <div
-          class="series-tracker"
-          data-exercise="abs_lento"
-          data-sets="2"
-        ></div>
-      </div>
-      <button class="btn-action" onclick="finishWorkout('Día 3 — Abdomen')">
-        Finalizar Entrenamiento
-      </button>
+        <button class="btn-action" onclick="finishWorkout('Miércoles — Abdomen')">Finalizar Entrenamiento</button>
     </div>
 
     <!-- DÍA 5: BRAZOS -->
     <div id="dia5" class="routine-section">
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">1. Fondos en Silla</span
-          ><span class="exercise-target">Tríceps</span>
+        <div class="ios-group">
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">1. Fondos en Silla</span><span class="exercise-target">Trícep</span></div>
+                <div class="exercise-meta">4 series de 10–15 reps</div>
+                <div class="series-tracker" data-exercise="fondos_silla_brazos" data-sets="4"></div>
+            </div>
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">2. Curl con Mochila</span><span class="exercise-target">Bícep</span></div>
+                <div class="exercise-meta">3 series de 10–12 reps</div>
+                <div class="series-tracker" data-exercise="curl_mochila" data-sets="3"></div>
+            </div>
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">3. Flexiones Diamante</span><span class="exercise-target">Brazos</span></div>
+                <div class="exercise-meta">3 series de 8–12 reps</div>
+                <div class="series-tracker" data-exercise="flexiones_diamante" data-sets="3"></div>
+            </div>
+            <div class="exercise-card">
+                <div class="exercise-header"><span class="exercise-name">4. Curl Isométrico</span><span class="exercise-target">Estático</span></div>
+                <div class="exercise-meta">2 series de 20–30 segundos (Sostener)</div>
+                <div class="series-tracker" data-exercise="curl_isometrico" data-sets="2"></div>
+            </div>
         </div>
-        <div class="exercise-meta">Objetivo: 4 series de 10–15 reps</div>
-        <div
-          class="series-tracker"
-          data-exercise="fondos_silla_brazos"
-          data-sets="4"
-        ></div>
-      </div>
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">2. Curl con Mochila</span
-          ><span class="exercise-target">Bíceps</span>
-        </div>
-        <div class="exercise-meta">Objetivo: 3 series de 10–12 reps</div>
-        <div
-          class="series-tracker"
-          data-exercise="curl_mochila"
-          data-sets="3"
-        ></div>
-      </div>
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">3. Flexiones Diamante</span
-          ><span class="exercise-target">Tríceps/Pecho</span>
-        </div>
-        <div class="exercise-meta">Objetivo: 3 series de 8–12 reps</div>
-        <div
-          class="series-tracker"
-          data-exercise="flexiones_diamante"
-          data-sets="3"
-        ></div>
-      </div>
-      <div class="exercise-card">
-        <div class="exercise-header">
-          <span class="exercise-name">4. Curl Isométrico</span
-          ><span class="exercise-target">Resistencia</span>
-        </div>
-        <div class="exercise-meta">
-          Objetivo: 2 series de 20–30 segundos (Sostener)
-        </div>
-        <div
-          class="series-tracker"
-          data-exercise="curl_isometrico"
-          data-sets="2"
-        ></div>
-      </div>
-      <button
-        class="btn-action"
-        onclick="finishWorkout('Día 5 — Brazos Completos')"
-      >
-        Finalizar Entrenamiento
-      </button>
+        <button class="btn-action" onclick="finishWorkout('Viernes — Brazos Completos')">Finalizar Entrenamiento</button>
     </div>
 
     <!-- ESTADÍSTICAS / HISTORIAL -->
     <div id="stats" class="routine-section">
-      <h2>Historial de Entrenamientos</h2>
-      <div class="history-container" id="history-list">
-        <p style="color: var(--text-muted); text-align: center">
-          No hay entrenamientos registrados aún.
-        </p>
-      </div>
-      <button
-        class="btn-action"
-        style="background: #ef4444; margin-top: 20px"
-        onclick="clearHistory()"
-      >
-        Borrar Historial
-      </button>
+        <div class="history-container" id="history-list">
+            <p style="color: var(--text-muted); text-align: center; padding: 20px 0;">No hay entrenamientos registrados aún.</p>
+        </div>
+        <button class="btn-action" style="color: var(--danger); margin-top: 24px;" onclick="clearHistory()">Borrar Historial</button>
     </div>
 
+    <!-- BARRA DE NAVEGACIÓN INFERIOR ESTILO IOS -->
+    <nav class="ios-tab-bar">
+        <button class="tab-btn active" onclick="switchTab('dia1', this)">
+            <span class="icon">🏋️‍♂️</span>
+            <span class="label">Lunes</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('dia3', this)">
+            <span class="icon">🧩</span>
+            <span class="label">Miércoles</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('dia5', this)">
+            <span class="icon">💪</span>
+            <span class="label">Viernes</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('stats', this)">
+            <span class="icon">📊</span>
+            <span class="label">Progreso</span>
+        </button>
+    </nav>
+
     <script>
-      document.querySelectorAll(".series-tracker").forEach((tracker) => {
-        const numSets = parseInt(tracker.getAttribute("data-sets"));
-        const exName = tracker.getAttribute("data-exercise");
-        for (let i = 1; i <= numSets; i++) {
-          const row = document.createElement("div");
-          row.className = "series-row";
-          row.innerHTML = `
+        document.querySelectorAll('.series-tracker').forEach(tracker => {
+            const numSets = parseInt(tracker.getAttribute('data-sets'));
+            const exName = tracker.getAttribute('data-exercise');
+            for (let i = 1; i <= numSets; i++) {
+                const row = document.createElement('div');
+                row.className = 'series-row';
+                row.innerHTML = `
                     <span>Serie ${i}</span>
                     <div class="chk-box" onclick="toggleSet(this, '${exName}', ${i})">✓</div>
                 `;
-          tracker.appendChild(row);
-        }
-      });
-
-      function switchTab(tabId, element) {
-        // Ocultar todas las secciones de rutina
-        document
-          .querySelectorAll(".routine-section")
-          .forEach((sec) => sec.classList.remove("active"));
-        // Quitar el estado activo a todos los botones
-        document
-          .querySelectorAll(".tab-btn")
-          .forEach((btn) => btn.classList.remove("active"));
-
-        // Mostrar la sección seleccionada
-        document.getElementById(tabId).classList.add("active");
-        // Marcar el botón presionado como activo de forma segura
-        element.classList.add("active");
-
-        // Renderizar el historial si es la pestaña de estadísticas
-        if (tabId === "stats") renderHistory();
-      }
-
-      function toggleSet(element, exercise, setNum) {
-        element.classList.toggle("checked");
-      }
-
-      function finishWorkout(workoutName) {
-        const date = new Date().toLocaleDateString("es-MX", {
-          weekday: "short",
-          day: "numeric",
-          month: "short",
+                tracker.appendChild(row);
+            }
         });
-        let history = JSON.parse(localStorage.getItem("workout_history")) || [];
-        history.unshift({ name: workoutName, date: date });
-        localStorage.setItem("workout_history", JSON.stringify(history));
 
-        document
-          .querySelectorAll(".chk-box")
-          .forEach((chk) => chk.classList.remove("checked"));
-        alert(`¡Entrenamiento registrado! 🔥`);
-        switchTab("stats");
-      }
-
-      function renderHistory() {
-        const container = document.getElementById("history-list");
-        const history =
-          JSON.parse(localStorage.getItem("workout_history")) || [];
-        if (history.length === 0) {
-          container.innerHTML =
-            '<p style="color: var(--text-muted); text-align: center;">No hay entrenamientos registrados aún.</p>';
-          return;
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.routine-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            element.classList.add('active');
+            
+            if(tabId === 'stats') renderHistory();
         }
-        container.innerHTML = history
-          .map(
-            (item) => `
+
+        function toggleSet(element, exercise, setNum) {
+            element.classList.toggle('checked');
+        }
+
+        function finishWorkout(workoutName) {
+            const date = new Date().toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short' });
+            let history = JSON.parse(localStorage.getItem('workout_history')) || [];
+            history.unshift({ name: workoutName, date: date });
+            localStorage.setItem('workout_history', JSON.stringify(history));
+            
+            document.querySelectorAll('.chk-box').forEach(chk => chk.classList.remove('checked'));
+            alert(`¡Entrenamiento registrado! 🔥`);
+            
+            // Redirigir a pestañas de progreso imitando comportamiento nativo
+            const statsBtn = document.querySelectorAll('.tab-btn')[3];
+            switchTab('stats', statsBtn);
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('history-list');
+            const history = JSON.parse(localStorage.getItem('workout_history')) || [];
+            if (history.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px 0;">No hay entrenamientos registrados aún.</p>';
+                return;
+            }
+            container.innerHTML = history.map(item => `
                 <div class="history-item">
                     <strong>${item.name}</strong>
-                    <span style="color: var(--accent);">${item.date}</span>
+                    <span style="color: var(--accent); font-weight: 500;">${item.date}</span>
                 </div>
-            `,
-          )
-          .join("");
-      }
-
-      function clearHistory() {
-        if (confirm("¿Borrar estadísticas?")) {
-          localStorage.removeItem("workout_history");
-          renderHistory();
+            `).join('');
         }
-      }
 
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("sw.js");
-      }
+        function clearHistory() {
+            if(confirm('¿Borrar estadísticas?')) {
+                localStorage.removeItem('workout_history');
+                renderHistory();
+            }
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
     </script>
-  </body>
+</body>
 </html>
