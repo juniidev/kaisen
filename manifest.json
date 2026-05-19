@@ -1,0 +1,16 @@
+{
+  "name": "Kaisen",
+  "short_name": "Kaisen",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme-color": "#1e293b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://flaticon.com",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
