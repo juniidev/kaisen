@@ -1,8 +1,7 @@
-const CACHE_NAME = 'fase2-v1';
+const CACHE_NAME = 'kaisen-v1';
 const ASSETS = [
   'index.html',
-  'manifest.json',
-  'https://jsdelivr.net'
+  'manifest.json'
 ];
 
 self.addEventListener('install', (e) => {

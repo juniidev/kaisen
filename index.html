@@ -1,224 +1,480 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kaisen</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1e293b">
-    <script src="https://jsdelivr.net"></script>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#1e293b" />
     <style>
-        :root {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent: #c8f543;
-            --success: #c8f543;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); padding: 15px; padding-bottom: 80px; }
-        header { text-align: center; margin-bottom: 20px; }
-        header h1 { font-size: 1.5rem; color: var(--accent); }
-        header p { font-size: 0.9rem; color: var(--text-muted); }
-        
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 10px; background: var(--bg-card); border: none; color: var(--text-muted); border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem;}
-        .tab-btn.active { background: var(--accent); color: var(--bg-main); }
-        
-        .routine-section { display: none; }
-        .routine-section.active { display: block; }
-        
-        .exercise-card { background: var(--bg-card); padding: 15px; border-radius: 12px; margin-bottom: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .exercise-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .exercise-name { font-size: 1.1rem; font-weight: bold; }
-        .exercise-target { font-size: 0.8rem; color: var(--accent); background: rgba(56, 189, 248, 0.1); padding: 2px 8px; border-radius: 12px; }
-        .exercise-meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; }
-        
-        .series-tracker { display: flex; flex-direction: column; gap: 8px; }
-        .series-row { display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.5); padding: 8px 12px; border-radius: 8px; }
-        .chk-box { width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--text-muted); display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .chk-box.checked { background: var(--success); border-color: var(--success); }
-        .chk-box i { display: none; color: white; font-size: 16px; }
-        .chk-box.checked i { display: block; }
+      :root {
+        --bg-main: #0f172a;
+        --bg-card: #1e293b;
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+        --accent: #c8f543;
+        --success: #22c55e;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, sans-serif;
+      }
+      body {
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        padding: 15px;
+        padding-bottom: 80px;
+      }
+      header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      header h1 {
+        font-size: 1.5rem;
+        color: var(--accent);
+      }
+      header p {
+        font-size: 0.9rem;
+        color: var(--text-muted);
+      }
 
-        .btn-action { width: 100%; padding: 12px; background: var(--success); border: none; color: var(--bg-main); border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-top: 10px; }
-        
-        .history-container { background: var(--bg-card); padding: 15px; border-radius: 12px; margin-top: 20px; }
-        .history-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
-        .history-item:last-child { border: none; }
+      .tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .tab-btn {
+        flex: 1;
+        padding: 10px;
+        background: var(--bg-card);
+        border: none;
+        color: var(--text-muted);
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 0.85rem;
+      }
+      .tab-btn.active {
+        background: var(--accent);
+        color: var(--bg-main);
+      }
+
+      .routine-section {
+        display: none;
+      }
+      .routine-section.active {
+        display: block;
+      }
+
+      .exercise-card {
+        background: var(--bg-card);
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .exercise-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .exercise-name {
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+      .exercise-target {
+        font-size: 0.8rem;
+        color: var(--accent);
+        background: rgba(56, 189, 248, 0.1);
+        padding: 2px 8px;
+        border-radius: 12px;
+      }
+      .exercise-meta {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+      }
+
+      .series-tracker {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .series-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(15, 23, 42, 0.5);
+        padding: 8px 12px;
+        border-radius: 8px;
+      }
+      .chk-box {
+        width: 26px;
+        height: 26px;
+        border-radius: 6px;
+        border: 2px solid var(--text-muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-weight: bold;
+        color: transparent;
+      }
+      .chk-box.checked {
+        background: var(--success);
+        border-color: var(--success);
+        color: white;
+      }
+
+      .btn-action {
+        width: 100%;
+        padding: 12px;
+        background: var(--success);
+        border: none;
+        color: var(--bg-card);
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      .history-container {
+        background: var(--bg-card);
+        padding: 15px;
+        border-radius: 12px;
+        margin-top: 20px;
+      }
+      .history-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 0.9rem;
+      }
+      .history-item:last-child {
+        border: none;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <header>
-        <h1>Hola Henry!</h1>
-        <p>Bienvenido Kaisen</p>
+      <h1>Hola, Henry</h1>
+      <p>Bienvenido a Kaisen</p>
     </header>
 
     <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('dia1')">Lunes<br>Pecho</button>
-        <button class="tab-btn" onclick="switchTab('dia3')">Miercoles<br>Abdomen</button>
-        <button class="tab-btn" onclick="switchTab('dia5')">Viernes<br>Brazos</button>
-        <button class="tab-btn" onclick="switchTab('stats')">📊<br>Progreso</button>
+      <button class="tab-btn active" onclick="switchTab('dia1', this)">
+        Lunes<br />Pecho
+      </button>
+      <button class="tab-btn" onclick="switchTab('dia3', this)">
+        Miércoles<br />Abs
+      </button>
+      <button class="tab-btn" onclick="switchTab('dia5', this)">
+        Viernes<br />Brazos
+      </button>
+      <button class="tab-btn" onclick="switchTab('stats', this)">
+        📊<br />Progreso
+      </button>
     </div>
 
     <!-- DÍA 1: PECHO -->
     <div id="dia1" class="routine-section active">
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">1. Flexiones Inclinadas</span><span class="exercise-target">Pecho Sup.</span></div>
-            <div class="exercise-meta">Objetivo: 4 series de 10–15 reps (Pies elevados)</div>
-            <div class="series-tracker" data-exercise="flexiones_inclinadas" data-sets="4"></div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">1. Flexiones Inclinadas</span
+          ><span class="exercise-target">Pecho Sup.</span>
         </div>
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">2. Flexiones Normales</span><span class="exercise-target">Pecho Gral.</span></div>
-            <div class="exercise-meta">Objetivo: 3 series de 12–20 reps</div>
-            <div class="series-tracker" data-exercise="flexiones_normales" data-sets="3"></div>
+        <div class="exercise-meta">
+          Objetivo: 4 series de 10–15 reps (Pies elevados)
         </div>
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">3. Flexiones Abiertas</span><span class="exercise-target">Pecho Ext.</span></div>
-            <div class="exercise-meta">Objetivo: 3 series de 10–15 reps</div>
-            <div class="series-tracker" data-exercise="flexiones_abiertas" data-sets="3"></div>
+        <div
+          class="series-tracker"
+          data-exercise="flexiones_inclinadas"
+          data-sets="4"
+        ></div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">2. Flexiones Normales</span
+          ><span class="exercise-target">Pecho Gral.</span>
         </div>
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">4. Flexiones Lentas</span><span class="exercise-target">Control</span></div>
-            <div class="exercise-meta">Objetivo: 2 series de 8–10 reps (3s bajando)</div>
-            <div class="series-tracker" data-exercise="flexiones_lentas" data-sets="2"></div>
+        <div class="exercise-meta">Objetivo: 3 series de 12–20 reps</div>
+        <div
+          class="series-tracker"
+          data-exercise="flexiones_normales"
+          data-sets="3"
+        ></div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">3. Flexiones Abiertas</span
+          ><span class="exercise-target">Pecho Ext.</span>
         </div>
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">5. Fondos en Silla</span><span class="exercise-target">Tríceps</span></div>
-            <div class="exercise-meta">Objetivo: 2 series de 10–12 reps (Ligero)</div>
-            <div class="series-tracker" data-exercise="fondos_silla_pecho" data-sets="2"></div>
+        <div class="exercise-meta">Objetivo: 3 series de 10–15 reps</div>
+        <div
+          class="series-tracker"
+          data-exercise="flexiones_abiertas"
+          data-sets="3"
+        ></div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">4. Flexiones Lentas</span
+          ><span class="exercise-target">Control</span>
         </div>
-        <button class="btn-action" onclick="finishWorkout('Día 1 — Pecho y Tríceps')">Finalizar Entrenamiento</button>
+        <div class="exercise-meta">
+          Objetivo: 2 series de 8–10 reps (3s bajando)
+        </div>
+        <div
+          class="series-tracker"
+          data-exercise="flexiones_lentas"
+          data-sets="2"
+        ></div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">5. Fondos en Silla</span
+          ><span class="exercise-target">Tríceps</span>
+        </div>
+        <div class="exercise-meta">
+          Objetivo: 2 series de 10–12 reps (Ligero)
+        </div>
+        <div
+          class="series-tracker"
+          data-exercise="fondos_silla_pecho"
+          data-sets="2"
+        ></div>
+      </div>
+      <button
+        class="btn-action"
+        onclick="finishWorkout('Día 1 — Pecho y Tríceps')"
+      >
+        Finalizar Entrenamiento
+      </button>
     </div>
 
     <!-- DÍA 3: ABDOMEN -->
     <div id="dia3" class="routine-section">
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">1. Crunch Clásico</span><span class="exercise-target">Abs Sup.</span></div>
-            <div class="exercise-meta">Objetivo: 4 series de 25 reps (Tus 100 base)</div>
-            <div class="series-tracker" data-exercise="crunch_clasico" data-sets="4"></div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">1. Crunch Clásico</span
+          ><span class="exercise-target">Abs Sup.</span>
         </div>
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">2. Elevaciones de Piernas</span><span class="exercise-target">Abs Inf.</span></div>
-            <div class="exercise-meta">Objetivo: 3 series de 12–15 reps</div>
-            <div class="series-tracker" data-exercise="elevaciones_piernas" data-sets="3"></div>
+        <div class="exercise-meta">
+          Objetivo: 4 series de 25 reps (Tus 100 base)
         </div>
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">3. Plancha</span><span class="exercise-target">Core</span></div>
-            <div class="exercise-meta">Objetivo: 3 series de 30–45 segundos</div>
-            <div class="series-tracker" data-exercise="plancha" data-sets="3"></div>
+        <div
+          class="series-tracker"
+          data-exercise="crunch_clasico"
+          data-sets="4"
+        ></div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">2. Elevaciones de Piernas</span
+          ><span class="exercise-target">Abs Inf.</span>
         </div>
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">4. Abdominal Lento</span><span class="exercise-target">Tensión</span></div>
-            <div class="exercise-meta">Objetivo: 2 series de 15 reps (Pausa 2s arriba)</div>
-            <div class="series-tracker" data-exercise="abs_lento" data-sets="2"></div>
+        <div class="exercise-meta">Objetivo: 3 series de 12–15 reps</div>
+        <div
+          class="series-tracker"
+          data-exercise="elevaciones_piernas"
+          data-sets="3"
+        ></div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">3. Plancha</span
+          ><span class="exercise-target">Core</span>
         </div>
-        <button class="btn-action" onclick="finishWorkout('Día 3 — Abdomen')">Finalizar Entrenamiento</button>
+        <div class="exercise-meta">Objetivo: 3 series de 30–45 segundos</div>
+        <div class="series-tracker" data-exercise="plancha" data-sets="3"></div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">4. Abdominal Lento</span
+          ><span class="exercise-target">Tensión</span>
+        </div>
+        <div class="exercise-meta">
+          Objetivo: 2 series de 15 reps (Pausa 2s arriba)
+        </div>
+        <div
+          class="series-tracker"
+          data-exercise="abs_lento"
+          data-sets="2"
+        ></div>
+      </div>
+      <button class="btn-action" onclick="finishWorkout('Día 3 — Abdomen')">
+        Finalizar Entrenamiento
+      </button>
     </div>
 
     <!-- DÍA 5: BRAZOS -->
     <div id="dia5" class="routine-section">
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">1. Fondos en Silla</span><span class="exercise-target">Tríceps</span></div>
-            <div class="exercise-meta">Objetivo: 4 series de 10–15 reps</div>
-            <div class="series-tracker" data-exercise="fondos_silla_brazos" data-sets="4"></div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">1. Fondos en Silla</span
+          ><span class="exercise-target">Tríceps</span>
         </div>
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">2. Curl con Mochila</span><span class="exercise-target">Bíceps</span></div>
-            <div class="exercise-meta">Objetivo: 3 series de 10–12 reps</div>
-            <div class="series-tracker" data-exercise="curl_mochila" data-sets="3"></div>
+        <div class="exercise-meta">Objetivo: 4 series de 10–15 reps</div>
+        <div
+          class="series-tracker"
+          data-exercise="fondos_silla_brazos"
+          data-sets="4"
+        ></div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">2. Curl con Mochila</span
+          ><span class="exercise-target">Bíceps</span>
         </div>
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">3. Flexiones Diamante</span><span class="exercise-target">Tríceps/Pecho</span></div>
-            <div class="exercise-meta">Objetivo: 3 series de 8–12 reps</div>
-            <div class="series-tracker" data-exercise="flexiones_diamante" data-sets="3"></div>
+        <div class="exercise-meta">Objetivo: 3 series de 10–12 reps</div>
+        <div
+          class="series-tracker"
+          data-exercise="curl_mochila"
+          data-sets="3"
+        ></div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">3. Flexiones Diamante</span
+          ><span class="exercise-target">Tríceps/Pecho</span>
         </div>
-        <div class="exercise-card">
-            <div class="exercise-header"><span class="exercise-name">4. Curl Isométrico</span><span class="exercise-target">Resistencia</span></div>
-            <div class="exercise-meta">Objetivo: 2 series de 20–30 segundos (Sostener)</div>
-            <div class="series-tracker" data-exercise="curl_isometrico" data-sets="2"></div>
+        <div class="exercise-meta">Objetivo: 3 series de 8–12 reps</div>
+        <div
+          class="series-tracker"
+          data-exercise="flexiones_diamante"
+          data-sets="3"
+        ></div>
+      </div>
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <span class="exercise-name">4. Curl Isométrico</span
+          ><span class="exercise-target">Resistencia</span>
         </div>
-        <button class="btn-action"  onclick="finishWorkout('Día 5 — Brazos Completos')">Finalizar Entrenamiento</button>
+        <div class="exercise-meta">
+          Objetivo: 2 series de 20–30 segundos (Sostener)
+        </div>
+        <div
+          class="series-tracker"
+          data-exercise="curl_isometrico"
+          data-sets="2"
+        ></div>
+      </div>
+      <button
+        class="btn-action"
+        onclick="finishWorkout('Día 5 — Brazos Completos')"
+      >
+        Finalizar Entrenamiento
+      </button>
     </div>
 
     <!-- ESTADÍSTICAS / HISTORIAL -->
     <div id="stats" class="routine-section">
-        <h2>Historial de Entrenamientos</h2>
-        <div class="history-container" id="history-list">
-            <p style="color: var(--text-muted); text-align: center;">No hay entrenamientos registrados aún.</p>
-        </div>
-        <button class="btn-action" style="background: #ef4444; margin-top: 20px;" onclick="clearHistory()">Borrar Historial</button>
+      <h2>Historial de Entrenamientos</h2>
+      <div class="history-container" id="history-list">
+        <p style="color: var(--text-muted); text-align: center">
+          No hay entrenamientos registrados aún.
+        </p>
+      </div>
+      <button
+        class="btn-action"
+        style="background: #ef4444; margin-top: 20px"
+        onclick="clearHistory()"
+      >
+        Borrar Historial
+      </button>
     </div>
 
     <script>
-        // Inicializar filas de series dinámicamente
-        document.querySelectorAll('.series-tracker').forEach(tracker => {
-            const numSets = parseInt(tracker.getAttribute('data-sets'));
-            const exName = tracker.getAttribute('data-exercise');
-            for (let i = 1; i <= numSets; i++) {
-                const row = document.createElement('div');
-                row.className = 'series-row';
-                row.innerHTML = `
+      document.querySelectorAll(".series-tracker").forEach((tracker) => {
+        const numSets = parseInt(tracker.getAttribute("data-sets"));
+        const exName = tracker.getAttribute("data-exercise");
+        for (let i = 1; i <= numSets; i++) {
+          const row = document.createElement("div");
+          row.className = "series-row";
+          row.innerHTML = `
                     <span>Serie ${i}</span>
-                    <div class="chk-box" onclick="toggleSet(this, '${exName}', ${i})"><i data-lucide="check"></i></div>
+                    <div class="chk-box" onclick="toggleSet(this, '${exName}', ${i})">✓</div>
                 `;
-                tracker.appendChild(row);
-            }
+          tracker.appendChild(row);
+        }
+      });
+
+      function switchTab(tabId, element) {
+        // Ocultar todas las secciones de rutina
+        document
+          .querySelectorAll(".routine-section")
+          .forEach((sec) => sec.classList.remove("active"));
+        // Quitar el estado activo a todos los botones
+        document
+          .querySelectorAll(".tab-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+
+        // Mostrar la sección seleccionada
+        document.getElementById(tabId).classList.add("active");
+        // Marcar el botón presionado como activo de forma segura
+        element.classList.add("active");
+
+        // Renderizar el historial si es la pestaña de estadísticas
+        if (tabId === "stats") renderHistory();
+      }
+
+      function toggleSet(element, exercise, setNum) {
+        element.classList.toggle("checked");
+      }
+
+      function finishWorkout(workoutName) {
+        const date = new Date().toLocaleDateString("es-MX", {
+          weekday: "short",
+          day: "numeric",
+          month: "short",
         });
-        lucide.createIcons();
+        let history = JSON.parse(localStorage.getItem("workout_history")) || [];
+        history.unshift({ name: workoutName, date: date });
+        localStorage.setItem("workout_history", JSON.stringify(history));
 
-        function switchTab(tabId) {
-            document.querySelectorAll('.routine-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
-            if(tabId === 'stats') renderHistory();
+        document
+          .querySelectorAll(".chk-box")
+          .forEach((chk) => chk.classList.remove("checked"));
+        alert(`¡Entrenamiento registrado! 🔥`);
+        switchTab("stats");
+      }
+
+      function renderHistory() {
+        const container = document.getElementById("history-list");
+        const history =
+          JSON.parse(localStorage.getItem("workout_history")) || [];
+        if (history.length === 0) {
+          container.innerHTML =
+            '<p style="color: var(--text-muted); text-align: center;">No hay entrenamientos registrados aún.</p>';
+          return;
         }
-
-        function toggleSet(element, exercise, setNum) {
-            element.classList.toggle('checked');
-        }
-
-        function finishWorkout(workoutName) {
-            const date = new Date().toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short' });
-            let history = JSON.parse(localStorage.getItem('workout_history')) || [];
-            history.unshift({ name: workoutName, date: date });
-            localStorage.setItem('workout_history', JSON.stringify(history));
-            
-            // Limpiar checks
-            document.querySelectorAll('.chk-box').forEach(chk => chk.classList.remove('checked'));
-            alert(`¡Entrenamiento "${workoutName}" registrado con éxito! 🔥`);
-            switchTab('stats');
-        }
-
-        function renderHistory() {
-            const container = document.getElementById('history-list');
-            const history = JSON.parse(localStorage.getItem('workout_history')) || [];
-            if (history.length === 0) {
-                container.innerHTML = '<p style="color: var(--text-muted); text-align: center;">No hay entrenamientos registrados aún.</p>';
-                return;
-            }
-            container.innerHTML = history.map(item => `
+        container.innerHTML = history
+          .map(
+            (item) => `
                 <div class="history-item">
                     <strong>${item.name}</strong>
                     <span style="color: var(--accent);">${item.date}</span>
                 </div>
-            `).join('');
-        }
+            `,
+          )
+          .join("");
+      }
 
-        function clearHistory() {
-            if(confirm('¿Seguro que quieres borrar tus estadísticas?')) {
-                localStorage.removeItem('workout_history');
-                renderHistory();
-            }
+      function clearHistory() {
+        if (confirm("¿Borrar estadísticas?")) {
+          localStorage.removeItem("workout_history");
+          renderHistory();
         }
+      }
 
-        // Registrar Service Worker para PWA
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("sw.js");
+      }
     </script>
-</body>
+  </body>
 </html>
