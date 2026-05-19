@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Kaisen</title>
     <link rel="manifest" href="manifest.json">
-    <!-- Meta etiquetas exclusivas para iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
@@ -20,42 +19,31 @@
             --success: #34c759;
             --danger: #ff453a;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         
         body { 
             background-color: var(--bg-ios); 
             color: var(--text-main); 
             padding: 20px 16px; 
             padding-top: calc(40px + env(safe-area-inset-top));
-            padding-bottom: calc(90px + env(safe-area-inset-bottom));
+            padding-bottom: calc(100px + env(safe-area-inset-bottom));
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Encabezado estilo iOS Large Titles */
         header { text-align: left; margin-bottom: 24px; padding-left: 4px; }
         header h1 { font-size: 2.1rem; font-weight: 700; letter-spacing: -0.5px; }
         header p { font-size: 0.95rem; color: var(--text-muted); margin-top: 2px; }
         
         .routine-section { display: none; }
-        .routine-section.active { display: block; animation: iosFade 0.25s ease-out; }
+        .routine-section.active { display: block; animation: iosFade 0.2s ease-out; }
         
         @keyframes iosFade {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Lista de ejercicios estilo iOS Form Group */
-        .ios-group {
-            background: var(--bg-card-ios);
-            border-radius: 12px;
-            margin-bottom: 24px;
-            overflow: hidden;
-        }
-
-        .exercise-card { 
-            padding: 16px; 
-            border-bottom: 0.5px solid #38383a;
-        }
+        .ios-group { background: var(--bg-card-ios); border-radius: 12px; margin-bottom: 24px; overflow: hidden; }
+        .exercise-card { padding: 16px; border-bottom: 0.5px solid #38383a; }
         .exercise-card:last-child { border-bottom: none; }
         
         .exercise-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
@@ -63,97 +51,51 @@
         .exercise-target { font-size: 0.75rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
         .exercise-meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px; }
         
-        /* Series Tracker */
         .series-tracker { display: flex; flex-direction: column; gap: 2px; }
-        .series-row { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            background: var(--bg-card-inner); 
-            padding: 10px 14px; 
-            border-radius: 8px;
-            margin-bottom: 4px;
-        }
+        .series-row { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card-inner); padding: 10px 14px; border-radius: 8px; margin-bottom: 4px; }
         .series-row span { font-size: 0.9rem; color: #e5e5ea; }
         
-        /* Checkbox estilo Apple Ring */
-        .chk-box { 
-            width: 24px; 
-            height: 24px; 
-            border-radius: 50%; 
-            border: 2px solid #48484a; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            cursor: pointer; 
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: transparent;
-            transition: all 0.2s cubic-bezier(0.1, 0.8, 0.25, 1);
-        }
-        .chk-box.checked { 
-            background: var(--success); 
-            border-color: var(--success); 
-            color: #ffffff; 
-            transform: scale(1.05);
-        }
+        .chk-box { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #48484a; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.75rem; font-weight: bold; color: transparent; transition: all 0.15s ease; }
+        .chk-box.checked { background: var(--success); border-color: var(--success); color: #ffffff; }
 
-        /* Botones del sistema iOS */
-        .btn-action { 
-            width: 100%; 
-            padding: 14px; 
-            background: var(--bg-card-ios); 
-            border: none; 
-            color: var(--accent); 
-            border-radius: 12px; 
-            font-weight: 600; 
-            font-size: 1.05rem; 
-            cursor: pointer; 
-            margin-top: 10px;
-            text-align: center;
-            transition: opacity 0.2s;
-        }
+        .btn-action { width: 100%; padding: 14px; background: var(--bg-card-ios); border: none; color: var(--accent); border-radius: 12px; font-weight: 600; font-size: 1.05rem; cursor: pointer; margin-top: 10px; text-align: center; }
         .btn-action:active { opacity: 0.6; }
         
-        /* Historial */
-        .history-container { background: var(--bg-card-ios); border-radius: 12px; overflow: hidden; padding: 4px 16px; }
+        .history-container { background: var(--bg-card-ios); border-radius: 12px; overflow: hidden; padding: 4px 16px; margin-top: 16px; }
         .history-item { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 0.5px solid #38383a; font-size: 0.95rem; }
         .history-item:last-child { border: none; }
-        .history-item strong { font-weight: 500; }
 
-        /* TAB BAR INFERIOR DE IOS (Fija con efecto traslúcido) */
-        .ios-tab-bar { 
-            position: fixed; 
-            bottom: 0; 
-            left: 0; 
-            right: 0; 
-            height: calc(65px + env(safe-area-inset-bottom)); 
-            background: rgba(28, 28, 30, 0.85); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 0.5px solid #2c2c2e;
-            display: flex; 
-            justify-content: space-around; 
-            padding-top: 8px;
-            padding-bottom: env(safe-area-inset-bottom);
-            z-index: 999;
-        }
-        .tab-btn { 
-            background: none; 
-            border: none; 
-            color: var(--text-muted); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            cursor: pointer; 
-            width: 20%;
-            transition: color 0.2s;
-        }
-        .tab-btn .icon { font-size: 1.35rem; margin-bottom: 3px; }
-        .tab-btn .label { font-size: 0.65rem; font-weight: 500; }
-        
-        /* Estado seleccionado estilo iOS */
+        /* SECCIÓN DEL MAPA DE CALOR (ESTILO GITHUB) */
+        .github-card { background: var(--bg-card-ios); border-radius: 12px; padding: 16px; margin-bottom: 20px; }
+        .github-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 12px; color: #e5e5ea; }
+        .heatmap-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; justify-content: center; }
+        .heatmap-day { aspect-ratio: 1; background-color: #2c2c2e; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; color: var(--text-muted); position: relative; font-weight: 500; }
+        .heatmap-day.active-workout { background-color: var(--accent); color: #000000; font-weight: bold; }
+        .heatmap-day.current-day { border: 1.5px solid #ffffff; }
+
+        /* NAV BAR INFERIOR CON ICONOS LINEALES */
+        .ios-tab-bar { position: fixed; bottom: 0; left: 0; right: 0; height: calc(65px + env(safe-area-inset-bottom)); background: rgba(28, 28, 30, 0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 0.5px solid #2c2c2e; display: flex; justify-content: space-around; padding-top: 10px; padding-bottom: env(safe-area-inset-bottom); z-index: 999; }
+        .tab-btn { background: none; border: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 22%; transition: color 0.15s; }
+        .tab-btn .label { font-size: 0.7rem; font-weight: 500; margin-top: 5px; }
         .tab-btn.active { color: var(--accent); }
+
+        /* ICONOS VECTORIALES CSS PREMIUM (SF SYMBOLS STYLE) */
+        .ios-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; position: relative; }
+        
+        /* Icono Lunes: Círculo con barra interior */
+        .icon-lunes::before { content: ''; width: 16px; height: 16px; border: 2px solid currentColor; border-radius: 50%; }
+        .icon-lunes::after { content: ''; position: absolute; width: 6px; height: 2px; background: currentColor; }
+        
+        /* Icono Miércoles: Retícula/Bloques planos */
+        .icon-miercoles::before { content: ''; width: 14px; height: 14px; border: 2px solid currentColor; border-radius: 3px; }
+        .icon-miercoles::after { content: ''; position: absolute; width: 14px; height: 2px; background: currentColor; }
+
+        /* Icono Viernes: Triángulos opuestos (Fuerza geométrica) */
+        .icon-viernes::before { content: ''; width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-bottom: 14px solid currentColor; }
+
+        /* Icono Progreso: Gráfica de barras minimalista */
+        .icon-stats::before { content: ''; width: 3px; height: 10px; background: currentColor; position: absolute; bottom: 3px; left: 3px; border-radius: 1px; }
+        .icon-stats::after { content: ''; width: 3px; height: 16px; background: currentColor; position: absolute; bottom: 3px; left: 9px; border-radius: 1px; box-shadow: 6px 0 0 currentColor; }
     </style>
 </head>
 <body>
@@ -251,33 +193,40 @@
 
     <!-- ESTADÍSTICAS / HISTORIAL -->
     <div id="stats" class="routine-section">
+        <!-- Mapa de calor tipo GitHub -->
+        <div class="github-card">
+            <h3>Frecuencia Mensual</h3>
+            <div class="heatmap-grid" id="github-heatmap"></div>
+        </div>
+
         <div class="history-container" id="history-list">
             <p style="color: var(--text-muted); text-align: center; padding: 20px 0;">No hay entrenamientos registrados aún.</p>
         </div>
         <button class="btn-action" style="color: var(--danger); margin-top: 24px;" onclick="clearHistory()">Borrar Historial</button>
     </div>
 
-    <!-- BARRA DE NAVEGACIÓN INFERIOR ESTILO IOS -->
+    <!-- BARRA DE NAVEGACIÓN INFERIOR PREMIUM -->
     <nav class="ios-tab-bar">
         <button class="tab-btn active" onclick="switchTab('dia1', this)">
-            <span class="icon">🏋️‍♂️</span>
+            <span class="ios-icon icon-lunes"></span>
             <span class="label">Lunes</span>
         </button>
         <button class="tab-btn" onclick="switchTab('dia3', this)">
-            <span class="icon">🧩</span>
+            <span class="ios-icon icon-miercoles"></span>
             <span class="label">Miércoles</span>
         </button>
         <button class="tab-btn" onclick="switchTab('dia5', this)">
-            <span class="icon">💪</span>
+            <span class="ios-icon icon-viernes"></span>
             <span class="label">Viernes</span>
         </button>
         <button class="tab-btn" onclick="switchTab('stats', this)">
-            <span class="icon">📊</span>
+            <span class="ios-icon icon-stats"></span>
             <span class="label">Progreso</span>
         </button>
     </nav>
 
     <script>
+        // Inicializar series
         document.querySelectorAll('.series-tracker').forEach(tracker => {
             const numSets = parseInt(tracker.getAttribute('data-sets'));
             const exName = tracker.getAttribute('data-exercise');
@@ -299,7 +248,10 @@
             document.getElementById(tabId).classList.add('active');
             element.classList.add('active');
             
-            if(tabId === 'stats') renderHistory();
+            if(tabId === 'stats') {
+                renderHeatmap();
+                renderHistory();
+            }
         }
 
         function toggleSet(element, exercise, setNum) {
@@ -307,17 +259,52 @@
         }
 
         function finishWorkout(workoutName) {
-            const date = new Date().toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short' });
+            // Guardamos la fecha exacta con marca de tiempo para el Heatmap [1]
+            const timestamp = new Date().toISOString().split('T')[0]; 
+            const dateStr = new Date().toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short' });
+            
             let history = JSON.parse(localStorage.getItem('workout_history')) || [];
-            history.unshift({ name: workoutName, date: date });
+            history.unshift({ name: workoutName, date: dateStr, rawDate: timestamp });
             localStorage.setItem('workout_history', JSON.stringify(history));
             
             document.querySelectorAll('.chk-box').forEach(chk => chk.classList.remove('checked'));
             alert(`¡Entrenamiento registrado! 🔥`);
             
-            // Redirigir a pestañas de progreso imitando comportamiento nativo
-            const statsBtn = document.querySelectorAll('.tab-btn')[3];
-            switchTab('stats', statsBtn);
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            switchTab('stats', tabButtons[3]);
+        }
+
+        // Generar Mapa de Calor tipo GitHub dinámico de los últimos 28 días [1]
+        function renderHeatmap() {
+            const grid = document.getElementById('github-heatmap');
+            grid.innerHTML = '';
+            
+            const history = JSON.parse(localStorage.getItem('workout_history')) || [];
+            // Extraer las fechas únicas de días entrenados
+            const completedDates = history.map(item => item.rawDate);
+            
+            const today = new Date();
+            
+            // Generar cuadrícula fija de 28 bloques (4 semanas completas atrás) [1]
+            for (let i = 27; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(today.getDate() - i);
+                const dateKey = d.toISOString().split('T')[0];
+                
+                const dayBlock = document.createElement('div');
+                dayBlock.className = 'heatmap-day';
+                dayBlock.innerText = d.getDate(); // Muestra el número de día adentro para control
+                
+                // Si coincide con la fecha de hoy, añadir borde indicador
+                if (i === 0) dayBlock.classList.add('current-day');
+                
+                // Si el usuario entrenó ese día, pintarlo de color de acento
+                if (completedDates.includes(dateKey)) {
+                    dayBlock.classList.add('active-workout');
+                }
+                
+                grid.appendChild(dayBlock);
+            }
         }
 
         function renderHistory() {
@@ -338,6 +325,7 @@
         function clearHistory() {
             if(confirm('¿Borrar estadísticas?')) {
                 localStorage.removeItem('workout_history');
+                renderHeatmap();
                 renderHistory();
             }
         }
